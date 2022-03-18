@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=graphics
+comment1.params=aarray
+comment1.target=graphics(int[])
+comment2.params=aarray\ ffixed
+comment2.target=void\ updateArray(int[],\ boolean)
+comment3.params=g
+comment3.target=void\ paint(java.awt.Graphics)
+comment4.params=num\ a1\ a2\ b1\ b2
+comment4.target=int\ remap(int,\ int,\ int,\ int,\ int)
+numComments=5
