@@ -12,13 +12,13 @@ import javax.sound.sampled.*;
 
 public class Runner  implements ActionListener
 {
-    int arraySize = 100000;
+    int arraySize = 12;
     int[] array = new int[arraySize];
     JFrame frame;
     graphics graph;
     JPanel main, sub;
-    JButton b1,b2,b3,b4;
-    boolean iSort = false, sSort = false, fixed = false, cSort = false;
+    JButton b1,b2,b3,b4,b5;
+    boolean iSort = false, sSort = false, fixed = false, cSort = false,randSort = false;
 
     Clip blip, backMusic, win;
     
@@ -46,6 +46,9 @@ public class Runner  implements ActionListener
         b4 =  new JButton("CockTail Sort");
          b4.addActionListener(this);
          
+        b5 =  new JButton("Shuffle Sort");
+         b5.addActionListener(this);
+         
         b3 =  new JButton("Shuffle");
          b3.addActionListener(this);
         
@@ -53,6 +56,7 @@ public class Runner  implements ActionListener
           sub.add(b1);
           sub.add(b2);
           sub.add(b4);
+          sub.add(b5);
           sub.add(b3);
         
         main = new JPanel();
@@ -76,7 +80,7 @@ public class Runner  implements ActionListener
                     /** Need this section of code to slow computer down.*/  
                     try 
                     { 
-                        runner.sleep(1); 
+                        runner.sleep(0); 
                     }
                     catch(InterruptedException e) {} 
                     
@@ -116,6 +120,12 @@ public class Runner  implements ActionListener
                 fixed = true;
                 win.start();
             }
+            if(randSort) {
+                randSort(runner);
+                randSort = false;
+                fixed = true;
+                win.start();
+            }
             
             blip.stop();
         }
@@ -138,8 +148,13 @@ public class Runner  implements ActionListener
         {
             cSort = true;
         }
+        
+        if (event.getSource() == b5)
+        {
+            randSort = true;
+        }
          
-        if (event.getSource() == b3 && !iSort && !sSort && !cSort)
+        if (event.getSource() == b3 && !iSort && !sSort && !cSort && !randSort)
         {
             resetArray();
             fixed = false;
@@ -178,7 +193,7 @@ public class Runner  implements ActionListener
                     largest = array[i];
                     place = i;
                     try { 
-                        runner.sleep(25); 
+                        runner.sleep(0); 
                     }catch(InterruptedException e) {}
                 }
                 
@@ -201,7 +216,7 @@ public class Runner  implements ActionListener
                 array[place] = array[place-1];
                 place--;
                 try { 
-                    runner.sleep(10); 
+                    runner.sleep(0); 
                 }catch(InterruptedException e) {} 
             }   
             array[place] = key;
@@ -246,6 +261,28 @@ public class Runner  implements ActionListener
           }
         //if no elements have been swapped, then the list is sorted
         } while (swapped);
+    }
+    
+    private void randSort(Thread bob) {
+        while(!isSorted()){
+            try { 
+                    bob.sleep(2); 
+            }catch(InterruptedException e) {}
+            blip.setMicrosecondPosition(0);
+            blip.start();
+            resetArray();
+        }        
+    }
+    
+    private boolean isSorted() {
+      boolean sorted = true;
+      for(int i = 0; i < array.length-1; i++){
+        if(array[i] > array[i+1]){
+            sorted = false;
+            break;
+        }
+      }
+      return sorted;
     }
     
     private void setupAudio()
