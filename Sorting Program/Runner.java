@@ -12,7 +12,7 @@ import javax.sound.sampled.*;
 
 public class Runner  implements ActionListener
 {
-    int arraySize = 12;
+    int arraySize = 100, delay = 5;
     int[] array = new int[arraySize];
     JFrame frame;
     graphics graph;
@@ -193,7 +193,7 @@ public class Runner  implements ActionListener
                     largest = array[i];
                     place = i;
                     try { 
-                        runner.sleep(0); 
+                        runner.sleep(delay); 
                     }catch(InterruptedException e) {}
                 }
                 
@@ -216,7 +216,7 @@ public class Runner  implements ActionListener
                 array[place] = array[place-1];
                 place--;
                 try { 
-                    runner.sleep(0); 
+                    runner.sleep(delay); 
                 }catch(InterruptedException e) {} 
             }   
             array[place] = key;
@@ -239,7 +239,7 @@ public class Runner  implements ActionListener
               array[i+1]=temp;
               swapped = true;
               try { 
-                    runner.sleep(0); 
+                    runner.sleep(delay); 
               }catch(InterruptedException e) {} 
             }
           }
@@ -266,7 +266,7 @@ public class Runner  implements ActionListener
     private void randSort(Thread bob) {
         while(!isSorted()){
             try { 
-                    bob.sleep(2); 
+                    bob.sleep(delay); 
             }catch(InterruptedException e) {}
             blip.setMicrosecondPosition(0);
             blip.start();
