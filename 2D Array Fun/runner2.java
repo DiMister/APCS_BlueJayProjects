@@ -1,8 +1,9 @@
+import java.util.ArrayList;
 
 public class runner2
 {
     String[][] draft;
-    String[] players = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","16","17","18","19","20"};
+    ArrayList<String> players = new ArrayList<String>();
     public runner2() {
         setupdraft();
         print();
@@ -19,10 +20,24 @@ public class runner2
         System.out.println();
     }
     
-    private void setupdraft(String[] players) {
-        draft = new String[5][players.length/5];
-        for(int index = 0; index < players.length; index++){
-            String[][]
+    private void setupdraft() {
+        for(int index = 0; index < 20; index++) {
+            players.add("Guy" + (index+1));
+        }
+        draft = new String[5][players.size()/5];
+        for(int index = 0; index < draft[0].length; index++){
+            if(index % 2 == 0)
+                for(int i = 0; i < draft.length; i++){
+                    String temp = players.remove(0);
+                    draft[i][index] = temp;
+                    System.out.println("Pick " + (index*5+i+1) + ", Owner " + (i+1) + ", Player " + temp);
+                }
+            else
+                for(int i = draft.length-1; i >= 0; i--){
+                    String temp = players.remove(0);
+                    draft[i][index] = temp;
+                    System.out.println("Pick " + (index*5-i+draft.length) + ", Owner " + (i+1) + ", Player " + temp);
+                }
         }
     }
     
