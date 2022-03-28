@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=HighSchoolStudent
+comment1.params=name\ address\ gender
+comment1.target=HighSchoolStudent(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment2.params=name\ address\ gender\ grade\ credits
+comment2.target=HighSchoolStudent(java.lang.String,\ java.lang.String,\ java.lang.String,\ int,\ int)
+comment3.params=creditsOfQuarter\ GPAofQuarter
+comment3.target=void\ updateCredits(int,\ double)
+comment4.params=addedCredits
+comment4.target=void\ addCredits(int)
+comment5.params=
+comment5.target=int\ getCredits()
+comment6.params=
+comment6.target=double\ getGPA()
+numComments=7

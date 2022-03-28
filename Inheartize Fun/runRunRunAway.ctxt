@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=runRunRunAway
+comment1.params=
+comment1.target=runRunRunAway()
+comment2.params=bruh
+comment2.target=void\ gradeStuff(Student)
+comment3.params=bruh\ newGPA\ newCredits
+comment3.target=void\ GPAstuff(HighSchoolStudent,\ double,\ int)
+numComments=4

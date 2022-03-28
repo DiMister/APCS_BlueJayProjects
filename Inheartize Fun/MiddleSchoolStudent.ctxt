@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=MiddleSchoolStudent
+comment1.params=name\ address\ gender
+comment1.target=MiddleSchoolStudent(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment2.params=name\ address\ gender\ grade
+comment2.target=MiddleSchoolStudent(java.lang.String,\ java.lang.String,\ java.lang.String,\ int)
+numComments=3

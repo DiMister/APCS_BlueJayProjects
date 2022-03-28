@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=ElementaryStudent
+comment1.params=name\ address\ gender
+comment1.target=ElementaryStudent(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment2.params=name\ address\ gender\ grade
+comment2.target=ElementaryStudent(java.lang.String,\ java.lang.String,\ java.lang.String,\ int)
+comment3.params=teacher
+comment3.target=void\ setTeacher(java.lang.String)
+comment4.params=MCAscore5
+comment4.target=void\ setMCAscore5(int)
+comment5.params=
+comment5.target=java.lang.String\ getTeacher()
+comment6.params=
+comment6.target=int\ getMCAscore5()
+numComments=7
