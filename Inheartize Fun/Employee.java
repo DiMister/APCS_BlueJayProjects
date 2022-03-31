@@ -15,7 +15,12 @@ public abstract class Employee
     
     public String displayPaycheck()
     {
-        return
+        return "" + calculatePaycheck();
+    }
+    
+    public String getName()
+    {
+        return name;
     }
 
     public void setName(String name)
@@ -33,8 +38,8 @@ public abstract class Employee
         this.fulltime = fulltime;
     }
     
-    public String getName()
+    public String getAllInfo(String type, String wage, String hours)
     {
-        return name;
+        return name+", "+type+", "+wage+", "+hours+", fulltime: "+fulltime+", benefits: "+benefits;
     }
 }

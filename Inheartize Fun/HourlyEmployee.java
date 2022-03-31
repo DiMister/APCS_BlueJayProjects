@@ -22,4 +22,19 @@ public class HourlyEmployee extends Employee
     {
         this.hoursWorked = hoursWorked;
     }
+    
+    public String displayPaycheck()
+    {
+        return "" + hoursWorked + " * " + wagePerHour + " = " + super.displayPaycheck();
+    }
+    
+    public String getAllInfo()
+    {
+        return super.getAllInfo("Hourly", "" + wagePerHour, "" + hoursWorked); 
+    }
+    
+    public String getAllInfo(String type)
+    {
+        return super.getAllInfo(type, "" + wagePerHour, "" + hoursWorked); 
+    }
 }

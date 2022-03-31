@@ -11,5 +11,8 @@ public class PartTimeEmplayee extends HourlyEmployee
         fulltime = false;
     }
 
-
+    public String getAllInfo()
+    {
+        return super.getAllInfo("PartTime"); 
+    }
 }

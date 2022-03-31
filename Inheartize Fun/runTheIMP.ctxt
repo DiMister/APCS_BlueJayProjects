@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=runTheIMP
+comment1.params=
+comment1.target=runTheIMP()
+comment2.params=length
+comment2.target=java.lang.String\ randomString(int)
+numComments=3

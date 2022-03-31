@@ -16,4 +16,14 @@ public class SalariedEmployee extends Employee
     {
         return yearlySalary / 52;
     }
+    
+    public String displayPaycheck()
+    {
+        return "" + yearlySalary + " / " + 52 + " = " + super.displayPaycheck();
+    }
+    
+    public String getAllInfo()
+    {
+        return super.getAllInfo("Salaried", "" + yearlySalary, "nein"); 
+    }
 }

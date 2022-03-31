@@ -1,5 +1,7 @@
 #BlueJ class context
 comment0.target=PartTimeEmplayee
-comment1.params=
-comment1.target=PartTimeEmplayee()
-numComments=2
+comment1.params=name\ wagePerHour
+comment1.target=PartTimeEmplayee(java.lang.String,\ int)
+comment2.params=
+comment2.target=java.lang.String\ getAllInfo()
+numComments=3
