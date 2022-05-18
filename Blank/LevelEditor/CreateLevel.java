@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.io.*;
 
 public class CreateLevel implements ActionListener, KeyListener, MouseListener
 {
@@ -93,11 +94,36 @@ public class CreateLevel implements ActionListener, KeyListener, MouseListener
         c1.add(main);
         f1.show();
     }
+    
+    public void saveLevel()
+    {
+        FileWriter fwriter; 
+        BufferedWriter bwriter;
+    
+        /**JOptionPane to get name of level*/
+        String name = (String)JOptionPane.showInputDialog(f1,"Enter name of level","Save",JOptionPane.INFORMATION_MESSAGE);
+       
+       
+        File thefile = new File(name+".txt");  
+                                   
+           try
+             {
+                 fwriter = new FileWriter(thefile);
+                 bwriter = new BufferedWriter(fwriter); 
+                 bwriter.newLine();
+                 bwriter.write(" ");
+                 
+                 
+                 bwriter.close();                       //Must always close the file when finished writing to it.  
+             }
+             catch(IOException ex) {}
+        
+     }
 
     public void actionPerformed (ActionEvent event)
     {
         if(event.getSource() == done) {
-
+            saveLevel();
         }
         if(event.getSource() == mapSelect) {
             if(mapSelect.getSelectedItem() == "Tiny")
