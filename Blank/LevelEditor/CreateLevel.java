@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.io.*;
 
-public class CreateLevel implements ActionListener, KeyListener, MouseListener
+public class CreateLevel implements ActionListener, KeyListener, MouseMotionListener
 {
     JFrame f1;
     JPanel main, sub;
@@ -18,8 +18,8 @@ public class CreateLevel implements ActionListener, KeyListener, MouseListener
     String[] brushes = {"1x1", "3x3", "5x5", "7x7"};
     String[] mapSize = {"Tiny", "Small", "Normal", "Huge", "Massive"};
 
-    Tile[][] map = new Tile[10][10];
-    
+    Tile[][] map = new Tile[18][18];
+
     int disX = 0;
     int disY = 0;
     public CreateLevel()
@@ -28,7 +28,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseListener
         setPanel();
         update();
     }
-    
+
     private void update()
     {
         Thread runner = new Thread();
@@ -39,11 +39,31 @@ public class CreateLevel implements ActionListener, KeyListener, MouseListener
                 runner.sleep(5); 
             }
             catch(InterruptedException e) {} 
-            
-            
+
+
             graph.updateDis(map,disX,disY);
             graph.repaint();
         }
+    }
+
+    private void drawTiles(Point p) {
+
+        Tile temp = getTile();
+
+        int brushSize = getBrushSize();
+
+        int col = (int)(p.getY() / 30);
+        int row = (int)(p.getX() / 30);
+
+        if(col < map[0].length && row < map.length)
+            for(int index = -brushSize/2; index < brushSize/2+1; index++){
+                if(row+index < map.length && row+index >= 0){
+                    for(int i = -brushSize/2; i < brushSize/2+1; i++){
+                        if(col+i < map[0].length && col+i >= 0)
+                            map[row+index][col+i] = temp;
+                    }
+                }
+            }
     }
 
     private void setMap() 
@@ -57,68 +77,77 @@ public class CreateLevel implements ActionListener, KeyListener, MouseListener
 
     private void setPanel()
     {
-         
+
         f1 = new JFrame("Lebel Edit");
-         f1.setSize(1000,1000);
-         f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         f1.setResizable(true);
-         
+        f1.setSize(1000,1000);
+        f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f1.setResizable(true);
+
         graph = new CreateGraphics(map,disX,disY);
-         graph.addKeyListener(this);
+        graph.addKeyListener(this);
 
         Container c1 = f1.getContentPane();
 
         tilesSelect = new JComboBox<>(tiles);
         brushSelect = new JComboBox<>(brushes);
         mapSelect = new JComboBox<>(mapSize);
-         mapSelect.addActionListener(this);
-        
+        mapSelect.addActionListener(this);
+
         done = new JButton("Done");
-         done.addActionListener(this);
-          
+        done.addActionListener(this);
 
         sub = new JPanel(); 
-         sub.add(tilesSelect);
-         sub.add(brushSelect);
-         sub.add(mapSelect);
-         sub.add(done);
+        sub.add(tilesSelect);
+        sub.add(brushSelect);
+        sub.add(mapSelect);
+        sub.add(done);
 
         main = new JPanel();
-         main.setLayout(new BorderLayout());          
-         main.setSize(500,500);
-         main.add(graph,BorderLayout.CENTER);
-         main.add(sub,BorderLayout.SOUTH);
-         main.addMouseListener(this);
-         
+        main.setLayout(new BorderLayout());          
+        main.setSize(500,500);
+        main.add(graph,BorderLayout.CENTER);
+        main.add(sub,BorderLayout.SOUTH);
+        main.addMouseMotionListener(this);
 
         c1.add(main);
         f1.show();
     }
-    
+
     public void saveLevel()
     {
-        FileWriter fwriter; 
-        BufferedWriter bwriter;
-    
         /**JOptionPane to get name of level*/
         String name = (String)JOptionPane.showInputDialog(f1,"Enter name of level","Save",JOptionPane.INFORMATION_MESSAGE);
-       
-       
-        File thefile = new File(name+".txt");  
-                                   
-           try
-             {
-                 fwriter = new FileWriter(thefile);
-                 bwriter = new BufferedWriter(fwriter); 
-                 bwriter.newLine();
-                 bwriter.write(" ");
-                 
-                 
-                 bwriter.close();                       //Must always close the file when finished writing to it.  
-             }
-             catch(IOException ex) {}
         
-     }
+        FileMangement.saveFile(map,name);
+    }
+
+    private Tile getTile() {
+        if(tilesSelect.getSelectedItem() == "Normal")
+            return new NormalTile();
+        if(tilesSelect.getSelectedItem() ==  "Wall")
+            return new WallTile();
+        if(tilesSelect.getSelectedItem() ==  "Water")
+            return new WaterTile();
+        if(tilesSelect.getSelectedItem() ==  "Lava")
+            return new LavaTile();
+        if(tilesSelect.getSelectedItem() ==  "Spike")
+            return new SpikeTile(1);
+
+        return null;
+    }
+
+    private int getBrushSize() {
+        if(brushSelect.getSelectedItem() == "1x1")
+            return 1;
+        if(brushSelect.getSelectedItem() ==  "3x3")
+            return 3;
+        if(brushSelect.getSelectedItem() ==  "5x5")
+            return 5;
+        if(brushSelect.getSelectedItem() ==  "7x7")
+            return 7;
+
+        return -1;
+    }
 
     public void actionPerformed (ActionEvent event)
     {
@@ -171,61 +200,12 @@ public class CreateLevel implements ActionListener, KeyListener, MouseListener
 
     public void keyTyped(KeyEvent evt)
     {}
-
-    @Override
-    public void mouseClicked(MouseEvent evt) { 
-
+    
+    public void mouseMoved(MouseEvent evt) {
+        
     }
-
-    @Override
-    public void mouseEntered(MouseEvent evt) { }
-
-    @Override
-    public void mouseExited(MouseEvent evt) { }
-
-    @Override
-    public void mousePressed(MouseEvent evt) { 
-        if ((evt.getModifiers() & InputEvent.BUTTON1_MASK) != 0) {
-            System.out.println("Left click detected" + (evt.getPoint()));
-            Tile temp = null;
-            if(tilesSelect.getSelectedItem() == "Normal")
-                temp = new NormalTile();
-            else if(tilesSelect.getSelectedItem() ==  "Wall")
-                temp = new WallTile();
-            else if(tilesSelect.getSelectedItem() ==  "Water")
-                temp = new WaterTile();
-            else if(tilesSelect.getSelectedItem() ==  "Lava")
-                temp = new LavaTile();
-            else if(tilesSelect.getSelectedItem() ==  "Spike")
-                temp = new SpikeTile(1);
-                
-            int brushSize = 0;
-            if(brushSelect.getSelectedItem() == "1x1")
-                brushSize = 1;
-            else if(brushSelect.getSelectedItem() ==  "3x3")
-                brushSize = 3;
-            else if(brushSelect.getSelectedItem() ==  "5x5")
-                brushSize = 5;
-            else if(brushSelect.getSelectedItem() ==  "7x7")
-                brushSize = 7;
-                
-            int col = (int)(evt.getPoint().getY() / 30);
-            int row = (int)(evt.getPoint().getX() / 30);
-            
-            //if(col < map[0].length && row < map.length)
-            //    map[row][col] = temp;
-            if(col < map[0].length && row < map.length)
-                for(int index = -brushSize/2; index < brushSize/2+1; index++){
-                    if(row+index < map.length && row+index >= 0){
-                        for(int i = -brushSize/2; i < brushSize/2+1; i++){
-                            if(col+i < map[0].length && col+i >= 0)
-                            map[row+index][col+i] = temp;
-                        }
-                    }
-                }
-        }
+    
+    public void mouseDragged(MouseEvent evt) {
+        drawTiles(evt.getPoint());
     }
-
-    @Override
-    public void mouseReleased(MouseEvent evt) { }
 }
