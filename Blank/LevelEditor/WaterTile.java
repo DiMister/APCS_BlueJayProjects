@@ -12,8 +12,8 @@ public class WaterTile extends Tile
     
     public WaterTile()
     {
-        super(Color.blue);
+        super(new ImageIcon("/images/water.png").getImage());
     }
 
-    public String toString(){return "water";}
+    public String toString(){return "v";}
 }

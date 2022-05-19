@@ -12,8 +12,8 @@ public class LavaTile extends Tile
     
     public LavaTile()
     {
-        super(Color.orange);
+        super(new ImageIcon("/images/lava.png").getImage());
     }
 
-    public String toString(){return "lava";}
+    public String toString(){return "l";}
 }

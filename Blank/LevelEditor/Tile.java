@@ -11,10 +11,14 @@ import java.util.ArrayList;
 
 public class Tile
 {
-    Color c;
-    public Tile(Color c)
+    private Image image;
+    public Tile(Image image)
     {
-        this.c = c;
+        this.image = image;
+    }
+    
+    public Image getImage() {
+        return image;
     }
 
     public String toString(){return "";}

@@ -10,7 +10,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 {
     JFrame f1;
     JPanel main, sub;
-    JButton done;
+    JButton done, importFile;
     JComboBox<String> mapSelect, tilesSelect, brushSelect;
     CreateGraphics graph;
 
@@ -47,7 +47,6 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
     }
 
     private void drawTiles(Point p) {
-
         Tile temp = getTile();
 
         int brushSize = getBrushSize();
@@ -64,15 +63,6 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
                     }
                 }
             }
-    }
-
-    private void setMap() 
-    {
-        for(int index = 0; index < map.length; index++){
-            for(int i = 0; i < map[0].length; i++){
-                map[index][i] = new NormalTile();
-            }
-        }
     }
 
     private void setPanel()
@@ -95,11 +85,14 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 
         done = new JButton("Done");
         done.addActionListener(this);
+        importFile = new JButton("Import File");
+        importFile.addActionListener(this);
 
         sub = new JPanel(); 
         sub.add(tilesSelect);
         sub.add(brushSelect);
         sub.add(mapSelect);
+        sub.add(importFile);
         sub.add(done);
 
         main = new JPanel();
@@ -111,14 +104,6 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 
         c1.add(main);
         f1.show();
-    }
-
-    public void saveLevel()
-    {
-        /**JOptionPane to get name of level*/
-        String name = (String)JOptionPane.showInputDialog(f1,"Enter name of level","Save",JOptionPane.INFORMATION_MESSAGE);
-        
-        FileMangement.saveFile(map,name);
     }
 
     private Tile getTile() {
@@ -152,7 +137,16 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
     public void actionPerformed (ActionEvent event)
     {
         if(event.getSource() == done) {
-            saveLevel();
+            /**JOptionPane to get name of level*/
+            String name = (String)JOptionPane.showInputDialog(f1,"Enter name of level","Save",JOptionPane.INFORMATION_MESSAGE);
+            
+            FileMangement.saveFile(map,name);
+        }
+        if(event.getSource() == importFile) {
+            /**JOptionPane to get name of file*/
+            String name = (String)JOptionPane.showInputDialog(f1,"Enter name of file","Import",JOptionPane.INFORMATION_MESSAGE);
+            
+            map = FileMangement.readMapFile(name);
         }
         if(event.getSource() == mapSelect) {
             if(mapSelect.getSelectedItem() == "Tiny")

@@ -12,8 +12,8 @@ public class WallTile extends Tile
     
     public WallTile()
     {
-       super(new Color(210,105,30));
+       super(new ImageIcon("/images/wall.png").getImage());
     }
 
-    public String toString(){return "wall";}
+    public String toString(){return "w";}
 }

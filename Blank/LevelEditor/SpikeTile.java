@@ -12,9 +12,9 @@ public class SpikeTile extends Tile
     int dam;
     public SpikeTile(int dam)
     {
-        super(Color.magenta);
+        super(new ImageIcon("/images/spike.png").getImage());
         this.dam = dam;
     }
 
-    public String toString(){return "spike";}
+    public String toString(){return "s";}
 }

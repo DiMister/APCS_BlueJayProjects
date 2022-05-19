@@ -2,6 +2,10 @@
 comment0.target=FileMangement
 comment1.params=map\ fileName
 comment1.target=void\ saveFile(Tile[][],\ java.lang.String)
-comment2.params=
-comment2.target=Tile[][]\ getFile()
-numComments=3
+comment2.params=fileName
+comment2.target=Tile[][]\ readMapFile(java.lang.String)
+comment3.params=car
+comment3.target=Tile\ findTile(char)
+comment4.params=fileName
+comment4.target=java.awt.Image\ findImage(java.lang.String)
+numComments=5
