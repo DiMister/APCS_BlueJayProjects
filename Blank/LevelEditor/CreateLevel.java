@@ -51,8 +51,8 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 
         int brushSize = getBrushSize();
 
-        int col = (int)(p.getY() / 30);
-        int row = (int)(p.getX() / 30);
+        int col = (int)((p.getY()-disY) / 30);
+        int row = (int)((p.getX()-disX) / 30);
 
         if(col < map[0].length && row < map.length)
             for(int index = -brushSize/2; index < brushSize/2+1; index++){
@@ -79,7 +79,9 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         Container c1 = f1.getContentPane();
 
         tilesSelect = new JComboBox<>(tiles);
+        tilesSelect.addActionListener(this);
         brushSelect = new JComboBox<>(brushes);
+        brushSelect.addActionListener(this);
         mapSelect = new JComboBox<>(mapSize);
         mapSelect.addActionListener(this);
 
@@ -104,6 +106,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 
         c1.add(main);
         f1.show();
+        graph.requestFocus();
     }
 
     private Tile getTile() {
@@ -159,6 +162,14 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
                 map = new Tile[40][40];
             else if(mapSelect.getSelectedItem() ==  "Massive")
                 map = new Tile[50][50];
+                
+            graph.requestFocus();
+        }
+        if(event.getSource() == brushSelect) {
+            graph.requestFocus();
+        }
+        if(event.getSource() == tilesSelect) {
+            graph.requestFocus();
         }
     }
 
@@ -167,23 +178,21 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         if(evt.getKeyCode() == 87)
         {
             //up 
-            disY+=10;
+            disY-=10;
         }
         if(evt.getKeyCode() == 83)
         {
             //down
-            disY-=10;
+            disY+=10;
         }
-        if(evt.getKeyCode() == KeyEvent.VK_RIGHT)
+        if(evt.getKeyCode() == KeyEvent.VK_A)
         {
             //left
-            System.out.println("Left key pressed");
             disX-=10;
         }
-        if(evt.getKeyCode() == KeyEvent.VK_LEFT)
+        if(evt.getKeyCode() == KeyEvent.VK_D)
         {
             //right
-            System.out.println("Right key pressed");
             disX+=10;
         }
 
