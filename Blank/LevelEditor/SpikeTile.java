@@ -12,7 +12,7 @@ public class SpikeTile extends Tile
     int dam;
     public SpikeTile(int dam)
     {
-        super(new ImageIcon("/images/spike.png").getImage());
+        super(Toolkit.getDefaultToolkit().getImage("images/spike.png"));
         this.dam = dam;
     }
 

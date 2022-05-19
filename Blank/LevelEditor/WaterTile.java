@@ -12,7 +12,7 @@ public class WaterTile extends Tile
     
     public WaterTile()
     {
-        super(new ImageIcon("/images/water.png").getImage());
+        super(Toolkit.getDefaultToolkit().getImage("images/water.png"));
     }
 
     public String toString(){return "v";}

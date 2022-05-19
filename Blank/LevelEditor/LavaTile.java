@@ -12,7 +12,7 @@ public class LavaTile extends Tile
     
     public LavaTile()
     {
-        super(new ImageIcon("/images/lava.png").getImage());
+        super(Toolkit.getDefaultToolkit().getImage("images/lava.png"));
     }
 
     public String toString(){return "l";}

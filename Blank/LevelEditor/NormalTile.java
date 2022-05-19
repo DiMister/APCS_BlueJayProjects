@@ -11,7 +11,7 @@ public class NormalTile extends Tile
     
     public NormalTile()
     {
-        super(FileMangement.findImage("normal.png"));
+        super(Toolkit.getDefaultToolkit().getImage("images/normal.png"));
     }
 
     public String toString(){return "n";}

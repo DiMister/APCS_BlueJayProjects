@@ -6,6 +6,4 @@ comment2.params=fileName
 comment2.target=Tile[][]\ readMapFile(java.lang.String)
 comment3.params=car
 comment3.target=Tile\ findTile(char)
-comment4.params=fileName
-comment4.target=java.awt.Image\ findImage(java.lang.String)
-numComments=5
+numComments=4

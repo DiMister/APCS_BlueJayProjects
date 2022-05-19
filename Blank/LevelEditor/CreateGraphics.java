@@ -32,9 +32,6 @@ public class CreateGraphics extends JPanel
           for(int i = 0; i < map[0].length; i++){
                 Tile temp = map[index][i];
                 if(temp != null) {
-                    Image bruh = temp.getImage();
-                    //System.out.println(temp.getImage());
-                    System.out.println(bruh.getWidth(null) + " " + bruh.getHeight(null));
                     g.drawImage(temp.getImage(),30*index+disX,30*i+disY,30,30,null);
                 }
             }

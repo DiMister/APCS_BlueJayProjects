@@ -73,32 +73,4 @@ public class FileMangement
         return null;
     }
     
-    public static Image findImage(String fileName) {
-
-        File directory = new File("C:/Users/theis/OneDrive/Documents/GitHub/APCS_BlueJayProjects/Blank/LevelEditor/images");
-  
-
-        MyFilenameFilter filter = new MyFilenameFilter(fileName);
-  
-        // store all names with same name 
-        // with/without extension
-        String[] flist = directory.list(filter);
-  
-        // Empty array
-        if (flist == null) {
-            System.out.println("Empty directory or directory does not exists.");
-            return null;
-        }
-        else {
-  
-            // Print all files with same name in directory
-            // as provided in object of MyFilenameFilter
-            // class
-            for (int i = 0; i < flist.length; i++) {
-                System.out.println(flist[i]+" found");
-                return Toolkit.getDefaultToolkit().getImage(flist[i]);
-            }
-        }
-        return null;
-    }
 }
