@@ -11,11 +11,15 @@ import javax.swing.event.*;
 public class CreateLevel implements ActionListener, KeyListener, MouseMotionListener, ChangeListener
 {
     JFrame f1;
-    JPanel main, sub;
+    JPanel main, sub, scrollPane;
     JButton done, importFile;
     JComboBox<String> mapSelect, tilesSelect;
     JSlider brushSelect;
     CreateGraphics graph;
+    Dimension ss;
+    JScrollPane scroll;
+    Container c1;
+    
 
     String[] tiles = {"Normal", "Wall", "Water", "Lava", "Spike"};
     String[] mapSize = {"Tiny", "Small", "Normal", "Huge", "Massive"};
@@ -84,14 +88,15 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
     {
 
         f1 = new JFrame("Lebel Edit");
-        f1.setSize(1000,1000);
+        ss = Toolkit.getDefaultToolkit().getScreenSize();
+        f1.setSize(ss.width,ss.height-50);
         f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f1.setResizable(true);
 
         graph = new CreateGraphics(map,disX,disY);
         graph.addKeyListener(this);
 
-        Container c1 = f1.getContentPane();
+        c1 = f1.getContentPane();
 
         tilesSelect = new JComboBox<>(tiles);
         tilesSelect.addActionListener(this);
@@ -106,6 +111,13 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         done.addActionListener(this);
         importFile = new JButton("Import File");
         importFile.addActionListener(this);
+        
+        scrollPane = new JPanel();
+        scrollPane.setLayout(new BorderLayout());
+        scrollPane.add(graph,BorderLayout.CENTER);
+        scrollPane.setPreferredSize(new Dimension(540,540));
+        scroll = new JScrollPane(scrollPane);
+        scroll.getVerticalScrollBar().setUnitIncrement(20);
 
         sub = new JPanel(); 
         sub.add(tilesSelect);
@@ -116,10 +128,10 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 
         main = new JPanel();
         main.setLayout(new BorderLayout());          
-        main.setSize(500,500);
-        main.add(graph,BorderLayout.CENTER);
+        //main.setSize(500,500);
+        main.add(scroll,BorderLayout.CENTER);
         main.add(sub,BorderLayout.SOUTH);
-        main.addMouseMotionListener(this);
+        graph.addMouseMotionListener(this);
 
         c1.add(main);
         f1.show();
@@ -153,9 +165,15 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
                 map = new Tile[40][30];
             else if(mapSelect.getSelectedItem() ==  "Huge")
                 map = new Tile[80][80];
-            else if(mapSelect.getSelectedItem() ==  "Massive")
+            else if(mapSelect.getSelectedItem() ==  "Massive"){
                 map = new Tile[160][160];
-
+                
+                //c1.revalidate();
+                
+            }
+            
+            scrollPane.setPreferredSize(new Dimension(map.length*30,map.length*30));
+            scrollPane.revalidate();
             graph.requestFocus();
         }
         if(event.getSource() == brushSelect) {

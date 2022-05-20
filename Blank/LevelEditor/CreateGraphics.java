@@ -40,6 +40,7 @@ public class CreateGraphics extends JPanel
                 if(temp != null) {
                     g.drawImage(temp.getImage(),30*index,30*i,30,30,null);
                 }
+                g.drawString(""+i+","+index,30*index,30*i);
             }
         }
         
