@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Enemy
+comment1.params=x\ y
+comment1.target=Enemy(int,\ int)
+comment2.params=x\ y\ speed\ hp
+comment2.target=Enemy(int,\ int,\ int,\ int)
+comment3.params=
+comment3.target=void\ dead()
+comment4.params=
+comment4.target=boolean\ getDead()
+numComments=5

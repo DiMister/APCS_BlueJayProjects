@@ -19,10 +19,13 @@ public class FileMangement
         {
             fwriter = new FileWriter(thefile);
             bwriter = new BufferedWriter(fwriter); 
+            
+            //for each tile in tile map adds letter in a grid in file
             for(Tile[] row : map){
                 String line = "";
                 for(Tile tile : row){
                     if(tile != null){
+                        //all tile toString() print a letter
                         line+= tile;
                     }else
                         line+= "-";
@@ -45,6 +48,7 @@ public class FileMangement
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
             String line;
             
+            //adds lines of text from file to String[]
             while((line = br.readLine()) != null){
                 lines.add(line);
             }
@@ -55,6 +59,7 @@ public class FileMangement
         System.out.println(lines);
         Tile[][] map = new Tile[lines.size()][lines.get(0).length()];
         
+        //reads each char and finds the tile that corsonds to it
         for(int index = 0; index < map.length; index++){
           for(int i = 0; i < map[0].length; i++){
                 map[index][i] = findTile(lines.get(index).charAt(i));

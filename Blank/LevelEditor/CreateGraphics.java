@@ -12,6 +12,7 @@ public class CreateGraphics extends JPanel
 
     public CreateGraphics(Tile[][] tiles, int x, int y)
     {
+        //tommyinit
         map = tiles;
         disX = x;
         disY = y;
@@ -26,21 +27,27 @@ public class CreateGraphics extends JPanel
     }
 
     public void paint (Graphics g)         
-    {
+    { 
         super.paint(g); 
+        //displaces entire graph (for fun put this in front of super.paint(g)
+        g.translate(disX,disY);
+        
+        //draws tiles from tile map
         for(int index = 0; index < map.length; index++){
           for(int i = 0; i < map[0].length; i++){
                 Tile temp = map[index][i];
+                //skip if null
                 if(temp != null) {
-                    g.drawImage(temp.getImage(),30*index+disX,30*i+disY,30,30,null);
+                    g.drawImage(temp.getImage(),30*index,30*i,30,30,null);
                 }
             }
         }
         
+        //draw grid
         for(int index = 0; index < map.length; index++){
           for(int i = 0; i < map[0].length; i++){
                 g.setColor(Color.black);
-                g.drawRect(30*index+disX,30*i+disY,30,30);
+                g.drawRect(30*index,30*i,30,30);
             }
         }
     }
