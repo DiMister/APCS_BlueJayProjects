@@ -6,11 +6,13 @@ import java.awt.Image;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 public class FileMangement
 {
 
-    public static void saveFile(Tile[][] map, String fileName) {
+    public static void saveFile(Tile[][] map, ArrayList<Enemy> enemies, String fileName) {
         FileWriter fwriter; 
         BufferedWriter bwriter;
 
@@ -34,7 +36,11 @@ public class FileMangement
                 bwriter.write(line);
                 bwriter.newLine();
             }
-
+            bwriter.newLine();
+            for(Enemy emy: enemies){
+                bwriter.write(""+emy);
+                bwriter.newLine();
+            }
             bwriter.close();                       //Must always close the file when finished writing to it.  
         }
         catch(IOException ex) {}
@@ -56,14 +62,23 @@ public class FileMangement
         }
         catch (IOException ex){}
         
-        System.out.println(lines);
-        Tile[][] map = new Tile[lines.size()][lines.get(0).length()];
+        int split = lines.size();
+        for(int index = 0; index < lines.size(); index++) {
+            if(lines.get(index) == "") split = index;
+        }
+        
+        //System.out.println(lines);
+        Tile[][] map = new Tile[split][lines.get(0).length()];
         
         //reads each char and finds the tile that corsonds to it
         for(int index = 0; index < map.length; index++){
           for(int i = 0; i < map[0].length; i++){
                 map[index][i] = findTile(lines.get(index).charAt(i));
             }
+        }
+        
+        for(int index = split; index < lines.size(); index++) {
+            
         }
         
         return map;
@@ -78,4 +93,44 @@ public class FileMangement
         return null;
     }
     
+    public static void splitImage(String fileName, int row, int col) {
+
+        File file = new File(fileName); // I have bear.jpg in my working directory
+        BufferedImage image = null;
+        try{
+            FileInputStream fis = new FileInputStream(file);
+            image = ImageIO.read(fis); //reading the image file
+            
+    
+            int rows = row; //You should decide the values for rows and cols variables
+            int cols = col;
+            int chunks = rows * cols;
+    
+            int chunkWidth = image.getWidth() / cols; // determines the chunk width and height
+            int chunkHeight = image.getHeight() / rows;
+            int count = 0;
+            BufferedImage imgs[] = new BufferedImage[chunks]; //Image array to hold image chunks
+            for (int x = 0; x < rows; x++) {
+                for (int y = 0; y < cols; y++) {
+                    //Initialize the image array with image chunks
+                    imgs[count] = new BufferedImage(chunkWidth, chunkHeight, image.getType());
+    
+                    // draws the image chunk
+                    Graphics2D gr = imgs[count++].createGraphics();
+                    gr.drawImage(image, 0, 0, chunkWidth, chunkHeight, chunkWidth * y, chunkHeight * x, chunkWidth * y + chunkWidth, chunkHeight * x + chunkHeight, null);
+                    gr.dispose();
+                }
+            }
+            System.out.println("Splitting done");
+    
+            //writing mini images into image files
+            for (int i = 0; i < imgs.length; i++) {
+                ImageIO.write(imgs[i], "png", new File("img" + i + ".png"));
+            }
+            System.out.println("Mini images created");
+        }
+        catch (IOException ex){System.out.println("Error with split image");}
+    }
 }
+
+    

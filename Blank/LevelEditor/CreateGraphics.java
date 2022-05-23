@@ -8,29 +8,27 @@ import java.util.ArrayList;
 public class CreateGraphics extends JPanel
 {
     Tile[][] map;
-    int disX, disY;
+    ArrayList<Enemy> enemies;
 
-    public CreateGraphics(Tile[][] tiles, int x, int y)
+    public CreateGraphics(Tile[][] tiles, ArrayList<Enemy> enemies)
     {
         //tommyinit
         map = tiles;
-        disX = x;
-        disY = y;
+        this.enemies = enemies;
         setBackground(Color.gray);
     }
     
-    public void updateDis(Tile[][] tiles, int x, int y)
+    public void updateReset(Tile[][] tiles, ArrayList<Enemy> enemies)
     {
         map = tiles;
-        disX = x;
-        disY = y;
+        this.enemies = enemies;
     }
 
     public void paint (Graphics g)         
     { 
         super.paint(g); 
         //displaces entire graph (for fun put this in front of super.paint(g)
-        g.translate(disX,disY);
+        //g.translate(disX,disY);
         
         //draws tiles from tile map
         for(int index = 0; index < map.length; index++){
@@ -40,8 +38,14 @@ public class CreateGraphics extends JPanel
                 if(temp != null) {
                     g.drawImage(temp.getImage(),30*index,30*i,30,30,null);
                 }
-                g.drawString(""+i+","+index,30*index,30*i);
+                //g.drawString(""+i+","+index,30*index,30*i);
             }
+        }
+        
+        //draw enemies
+        for(Enemy e : enemies){
+            g.setColor(Color.red);
+            g.fillRect(e.getX(),e.getY(),30,30);
         }
         
         //draw grid

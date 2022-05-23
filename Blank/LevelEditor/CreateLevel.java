@@ -8,12 +8,12 @@ import java.io.*;
 import javax.swing.event.*;
 
 //you do not want to see how many methods I override
-public class CreateLevel implements ActionListener, KeyListener, MouseMotionListener, ChangeListener
+public class CreateLevel implements ActionListener, MouseMotionListener, ChangeListener, MouseListener
 {
     JFrame f1;
     JPanel main, sub, scrollPane;
-    JButton done, importFile;
-    JComboBox<String> mapSelect, tilesSelect;
+    JButton done, importFile, swap;
+    JComboBox<String> mapSelect, tilesSelect, enemySelect;
     JSlider brushSelect;
     CreateGraphics graph;
     Dimension ss;
@@ -23,13 +23,15 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
 
     String[] tiles = {"Normal", "Wall", "Water", "Lava", "Spike"};
     String[] mapSize = {"Tiny", "Small", "Normal", "Huge", "Massive"};
+    String[] enemiesList = {"Skeleton"};
 
     Tile[][] map = new Tile[18][18];
     Tile selectedTile = new NormalTile();
+    ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
-    int disX = 0;
-    int disY = 0;
+
     int brushSize = 1;
+    boolean swapped = false;
     
     public CreateLevel()
     {
@@ -49,7 +51,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
             }
             catch(InterruptedException e) {} 
 
-            graph.updateDis(map,disX,disY);
+            //graph.updateMap(map);
             graph.repaint();
         }
     }
@@ -57,7 +59,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
     private void drawTiles(Point p) {
 
         //set location based on the index value of grid and dispalcment
-        p.setLocation((int)((p.getX()-disX) / 30),(int)((p.getY()-disY) / 30));
+        p.setLocation((int)((p.getX()) / 30),(int)((p.getY()) / 30));
         //int rounding caused a lot of pain
         int row = (int)p.getX();
         int col = (int)p.getY();
@@ -73,6 +75,12 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
                     }
                 }
             }
+    }
+    
+    private void drawEnemy(Point p) {
+        p.setLocation((int)((p.getX()) / 30),(int)((p.getY()) / 30));
+        if(p.y < map[0].length && p.x < map.length)
+            enemies.add(new Enemy(p.x*30,p.y*30));
     }
     
     private boolean inside_circle(Point center, Point tile, float radius) {
@@ -91,10 +99,11 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         ss = Toolkit.getDefaultToolkit().getScreenSize();
         f1.setSize(ss.width,ss.height-50);
         f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f1.setResizable(true);
+        f1.setResizable(false);
 
-        graph = new CreateGraphics(map,disX,disY);
-        graph.addKeyListener(this);
+        graph = new CreateGraphics(map,enemies);
+        graph.addMouseMotionListener(this);
+        graph.addMouseListener(this);
 
         c1 = f1.getContentPane();
 
@@ -102,6 +111,8 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         tilesSelect.addActionListener(this);
         mapSelect = new JComboBox<>(mapSize);
         mapSelect.addActionListener(this);
+        enemySelect = new JComboBox<>(enemiesList);
+        enemySelect.addActionListener(this);
 
         //sliders suck they need their own changeLister cuz their *special*
         brushSelect = new JSlider(JSlider.HORIZONTAL,1,10,1);
@@ -111,6 +122,8 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         done.addActionListener(this);
         importFile = new JButton("Import File");
         importFile.addActionListener(this);
+        swap = new JButton("Swap");
+        swap.addActionListener(this);
         
         scrollPane = new JPanel();
         scrollPane.setLayout(new BorderLayout());
@@ -123,6 +136,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         sub.add(tilesSelect);
         sub.add(brushSelect);
         sub.add(mapSelect);
+        sub.add(swap);
         sub.add(importFile);
         sub.add(done);
 
@@ -131,11 +145,34 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
         //main.setSize(500,500);
         main.add(scroll,BorderLayout.CENTER);
         main.add(sub,BorderLayout.SOUTH);
-        graph.addMouseMotionListener(this);
+        
 
         c1.add(main);
         f1.show();
-        graph.requestFocus();
+    }
+    
+    private void swapToObjects() {
+        swapped = true;
+        sub.removeAll();
+        
+        sub.add(enemySelect);
+        sub.add(swap);
+        sub.add(importFile);
+        sub.add(done);
+        f1.show();
+    }
+    
+    private void swapToTiles() {
+        swapped = false;
+        sub.removeAll();
+        
+        sub.add(tilesSelect);
+        sub.add(brushSelect);
+        sub.add(mapSelect);
+        sub.add(swap);
+        sub.add(importFile);
+        sub.add(done);
+        f1.show();
     }
 
     @Override
@@ -146,7 +183,7 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
             /**JOptionPane to get name of level*/
             String name = (String)JOptionPane.showInputDialog(f1,"Enter name of level","Save",JOptionPane.INFORMATION_MESSAGE);
 
-            FileMangement.saveFile(map,name);
+            FileMangement.saveFile(map,enemies,name);
         }
         if(event.getSource() == importFile) {
             //import level
@@ -154,6 +191,10 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
             String name = (String)JOptionPane.showInputDialog(f1,"Enter name of file","Import",JOptionPane.INFORMATION_MESSAGE);
 
             map = FileMangement.readMapFile(name);
+        }
+        if(event.getSource() == swap) {
+            if(swapped) swapToTiles();
+            else swapToObjects();
         }
         if(event.getSource() == mapSelect) {
             //wipes map and makes new size
@@ -167,18 +208,14 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
                 map = new Tile[80][80];
             else if(mapSelect.getSelectedItem() ==  "Massive"){
                 map = new Tile[160][160];
-                
-                //c1.revalidate();
-                
+                                
             }
             
+            
+            enemies = new ArrayList<Enemy>();
+            graph.updateReset(map,enemies);
             scrollPane.setPreferredSize(new Dimension(map.length*30,map.length*30));
             scrollPane.revalidate();
-            graph.requestFocus();
-        }
-        if(event.getSource() == brushSelect) {
-            //this if f*** stubid
-            graph.requestFocus();
         }
         if(event.getSource() == tilesSelect) {
             if(tilesSelect.getSelectedItem() == "Normal")
@@ -192,43 +229,26 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
             if(tilesSelect.getSelectedItem() ==  "Spike")
                 selectedTile = new SpikeTile(1);
             
-            graph.requestFocus();
         }
     }
+    
+    @Override
+    public void mouseClicked(MouseEvent evt) {}
 
     @Override
-    public void keyPressed(KeyEvent evt)
-    {
-        if(evt.getKeyCode() == 87)
-        {
-            //up 
-            disY-=10;
-        }
-        if(evt.getKeyCode() == 83)
-        {
-            //down
-            disY+=10;
-        }
-        if(evt.getKeyCode() == KeyEvent.VK_A)
-        {
-            //left
-            disX-=10;
-        }
-        if(evt.getKeyCode() == KeyEvent.VK_D)
-        {
-            //right
-            disX+=10;
-        }
-
+    public void mouseEntered(MouseEvent evt) {}
+    
+    @Override
+    public void mouseExited(MouseEvent evt) {}
+    
+    @Override
+    public void mousePressed(MouseEvent evt) {
+        if(!swapped) drawTiles(evt.getPoint());
+        else drawEnemy(evt.getPoint());
     }
-
+    
     @Override
-    public void keyReleased(KeyEvent evt)
-    {}
-
-    @Override
-    public void keyTyped(KeyEvent evt)
-    {}
+    public void mouseReleased(MouseEvent evt) {}
 
     @Override
     public void mouseMoved(MouseEvent evt) 
@@ -236,14 +256,13 @@ public class CreateLevel implements ActionListener, KeyListener, MouseMotionList
     
     @Override
     public void mouseDragged(MouseEvent evt) {
-        drawTiles(evt.getPoint());
+        if(!swapped) drawTiles(evt.getPoint());
     }
 
     @Override
     public void stateChanged(ChangeEvent event){
         //do weird math to make number always odd
         brushSize = brushSelect.getValue() + brushSelect.getValue() -1;
-        graph.requestFocus();
     }
 
 }
